@@ -11,9 +11,9 @@ contract('HODLCoin', function(accounts) {
     // First depositor gets 98% of their deposit in tokens, for full value
     // since there's nobody else to get the fee
     await hodl.sendTransaction({from: accounts[0], value: 1e18});
-    assert.equal((await hodl.balanceOf(accounts[0])).toNumber(), 1e20 * 0.98);
-    assert.equal((await hodl.totalSupply()), 1e20 * 0.98);
-    assert.equal((await hodl.value(1e20 * 0.98)).toNumber(), 1e18);
+    assert.equal((await hodl.balanceOf(accounts[0])).toNumber(), 1e20);
+    assert.equal((await hodl.totalSupply()), 1e20);
+    assert.equal((await hodl.value(1e20)).toNumber(), 1e18);
     assert.equal((await web3.eth.getBalance(hodl.address)), 1e18);
     assert.equal((await hodl.value(await hodl.totalSupply())).toNumber(), (await web3.eth.getBalance(hodl.address)).toNumber());
 
@@ -21,9 +21,9 @@ contract('HODLCoin', function(accounts) {
     // to existing holders.
     await hodl.sendTransaction({from: accounts[1], value: 1e18});
     var totalSupply = await hodl.totalSupply();
-    assert.equal(totalSupply, 1e20 * 0.98 + 1e20 * 0.98 * 0.98);
+    assert.equal(totalSupply, 1e20 + 1e20 * 0.98);
     var balance = await hodl.balanceOf(accounts[1]);
-    assert.equal(balance.toNumber(), 1e20 * 0.98 * 0.98);
+    assert.equal(balance.toNumber(), 1e20 * 0.98);
     assert.equal((await web3.eth.getBalance(hodl.address)), 2e18);
     assert.equal((await hodl.value(balance)).toNumber(), web3.toBigNumber(2e18).div(totalSupply).mul(balance));
     assert.equal((await hodl.value(await hodl.totalSupply())).toNumber(), (await web3.eth.getBalance(hodl.address)).toNumber());

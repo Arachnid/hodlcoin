@@ -27,11 +27,11 @@ contract HODLCoin is StandardToken {
     // Allocate tokens proportional to the deposit and the current token price
     if(totalSupply > 0) {
       amount = totalSupply.mul(msg.value).div(this.balance - msg.value);
+      // Subtract deposit fee
+      amount -= amount.mul(DEPOSIT_FEE).div(100);
     } else {
       amount = msg.value.mul(MULTIPLIER);
     }
-    // Subtract deposit fee
-    amount -= amount.mul(DEPOSIT_FEE).div(100);
 
     totalSupply = totalSupply.add(amount);
     balances[msg.sender] = balances[msg.sender].add(amount);
