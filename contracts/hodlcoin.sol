@@ -6,6 +6,9 @@ import 'zeppelin-solidity/contracts/math/SafeMath.sol';
 contract HODLCoin is StandardToken {
   using SafeMath for *;
 
+  event Deposit(address indexed account, uint etherValue, uint tokenValue);
+  event Withdrawal(address indexed account, uint etherValue, uint tokenValue);
+
   string constant public name = "HODLCoin";
   string constant public symbol = "HODL";
   uint8 constant public decimals = 18;
@@ -35,6 +38,7 @@ contract HODLCoin is StandardToken {
 
     totalSupply = totalSupply.add(amount);
     balances[msg.sender] = balances[msg.sender].add(amount);
+    Deposit(msg.sender, msg.value, amount);
   }
 
   function() public payable {
@@ -46,5 +50,6 @@ contract HODLCoin is StandardToken {
     totalSupply = totalSupply.sub(tokens);
     balances[msg.sender] = balances[msg.sender].sub(tokens);
     msg.sender.transfer(amount);
+    Withdrawal(msg.sender, amount, tokens);
   }
 }
